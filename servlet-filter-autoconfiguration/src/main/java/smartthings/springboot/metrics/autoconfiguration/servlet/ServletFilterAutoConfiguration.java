@@ -1,4 +1,4 @@
-package smartthings.metrics.autoconfiguration.servlet;
+package smartthings.springboot.metrics.autoconfiguration.servlet;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.servlet.InstrumentedFilter;
@@ -9,6 +9,10 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Automatically adds a {@link InstrumentedFilter} to the servlet configuration when one is
+ * present on the classpath.
+ */
 @Configuration
 @ConditionalOnClass(value = {InstrumentedFilter.class, Filter.class})
 public class ServletFilterAutoConfiguration {
@@ -24,14 +28,23 @@ public class ServletFilterAutoConfiguration {
 	}
 
 	@Bean
-	public InstrumentedFilterContextListener instrumentedFilterContextListener(final MetricRegistry metricRegistry) {
+	public InstrumentedFilterContextListener instrumentedFilterContextListener(
+			final MetricRegistry metricRegistry) {
 		// register the metric registry with the servlet context
-		return new InstrumentedFilterContextListener() {
-			@Override
-			protected MetricRegistry getMetricRegistry() {
-				return metricRegistry;
-			}
-		};
+		return new MetricRegistryContextListener(metricRegistry);
+	}
+
+	private static class MetricRegistryContextListener extends InstrumentedFilterContextListener {
+
+		private final MetricRegistry metricRegistry;
+
+		private MetricRegistryContextListener(MetricRegistry metricRegistry) {
+			this.metricRegistry = metricRegistry;
+		}
+
+		@Override protected MetricRegistry getMetricRegistry() {
+			return metricRegistry;
+		}
 	}
 
 }

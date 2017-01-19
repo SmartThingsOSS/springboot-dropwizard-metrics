@@ -1,7 +1,10 @@
-package smartthings.metrics.autoconfiguration.servlet;
+package smartthings.springboot.metrics.autoconfiguration.servlet;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Configuration properties for {@link ServletFilterAutoConfiguration}.
+ */
 @ConfigurationProperties(prefix = "metrics.servlet")
 public class ServletFilterProperties {
 

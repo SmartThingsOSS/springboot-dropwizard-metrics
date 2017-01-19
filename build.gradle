@@ -1,13 +1,18 @@
 
-plugins {
-	id 'java'
-	id 'com.jfrog.bintray' version '1.7.3'
-	id 'org.ajoberstar.grgit' version '1.6.0'
-	id 'org.ajoberstar.release-opinion' version '1.6.0'
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+		classpath 'org.ajoberstar:grgit:1.6.0'
+		classpath 'org.ajoberstar:gradle-git:1.6.0'
+	}
 }
 
-apply from: file('gradle/convention.gradle')
-
+apply plugin: 'org.ajoberstar.grgit'
+apply plugin: 'org.ajoberstar.release-opinion'
 
 import org.ajoberstar.gradle.git.release.opinion.Strategies
 
@@ -21,11 +26,12 @@ tasks.release.dependsOn ':springboot-dropwizard-metrics:bintrayUpload'
 ext {
 	def grgit = org.ajoberstar.grgit.Grgit.open(project.rootDir)
 
+	tag = (grgit.tag.list().size() > 0) ? grgit.tag.list().last().name : project.version.toString()
 	revision = grgit.head().id
 	shortMessage = grgit.head().shortMessage
 }
 
-group 'smartthings.metrics'
+group 'smartthings.springboot.metrics'
 
 allprojects {
 	repositories {
@@ -34,11 +40,21 @@ allprojects {
 
 		mavenLocal()
 	}
+}
+
+subprojects {
+
+	apply plugin: 'java'
+	apply from: file("${project.rootDir}/gradle/convention.gradle")
+	apply from: file("${project.rootDir}/gradle/publish.gradle")
 
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
+
 }
 
 if (!JavaVersion.current().java8Compatible) {
 	throw new IllegalStateException("Must be built with Java 8 or higher")
 }
+
+

@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-smartthings.metrics.autoconfiguration.servlet.ServletFilterAutoConfiguration
+smartthings.springboot.metrics.autoconfiguration.servlet.ServletFilterAutoConfiguration

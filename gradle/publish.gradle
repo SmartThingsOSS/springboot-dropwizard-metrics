@@ -1,8 +1,9 @@
+
+
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
-ext.isSnapshot = version.endsWith("SNAPSHOT")
-
+ext.isSnapshot = version.toString().endsWith("SNAPSHOT")
 
 task sourceJar(type: Jar, dependsOn: classes) {
 	classifier = 'sources'
@@ -18,46 +19,40 @@ artifacts {
 	archives sourceJar, javadocJar
 }
 
+task printProperties {
+	doLast {
+		println tag
+	}
+}
+
 if (isSnapshot) {
-	if (project.hasProperty('smartThingsArtifactoryUserName')) {
-		publishing {
-			publications {
-				main(MavenPublication) {
-					from components.java
-					artifact sourceJar
-					artifact javadocJar
-					pom.withXml {
-						def root = asNode()
-						// Work around gradle bug that publishes compile dependencies as runtime
-						// http://discuss.gradle.org/t/maven-publish-plugin-generated-pom-making-dependency-scope-runtime/7494/10
-						root.dependencies.'*'.findAll() {
-							it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
-								dep.name == it.artifactId.text()
-							}
-						}.each() {
-							it.scope*.value = 'compile'
-						}
-					}
-				}
+	publishing {
+		publications {
+			main(MavenPublication) {
+				from components.java
+				artifact sourceJar
 			}
-			repositories {
-				maven {
-					credentials {
-						username smartThingsArtifactoryUserName
-						password smartThingsArtifactoryPassword
-					}
-					url "https://smartthings.artifactoryonline.com/smartthings/libs-snapshot-local"
+		}
+		repositories {
+			maven {
+				credentials {
+					username smartThingsUserName
+					password smartThingsPassword
 				}
+				url "https://smartthings.artifactoryonline.com/smartthings/libs-snapshot-local"
 			}
 		}
 	}
+
 } else {
 	publishing {
 		publications {
 			mavenJava(MavenPublication) {
 				from components.java
 				artifact sourceJar
-				artifact javadocJar
+				groupId project.group
+				artifactId project.name
+				version project.version
 				pom.withXml {
 					def root = asNode()
 					// Work around gradle bug that publishes compile dependencies as runtime
@@ -96,17 +91,17 @@ bintray {
 	publish = true
 	pkg {
 		repo = 'maven'
-		name = 'smartthings.spring-boot-datastax-cassandra'
+		name = 'smartthings.springboot-dropwizard-metrics'
 		userOrg = 'smartthingsoss'
 		licenses = ['Apache-2.0']
-		desc = 'Cassandra configuration for Spring Boot'
+		desc = 'Spring Boot Auto Configuratoin for Dropwizard Metrics'
 		labels = []
-		websiteUrl = 'https://github.com/SmartThingsOSS/spring-boot-datastax-cassandra'
-		issueTrackerUrl = 'https://github.com/SmartThingsOSS/spring-boot-datastax-cassandra'
-		vcsUrl = 'https://github.com/SmartThingsOSS/spring-boot-datastax-cassandra.git'
+		websiteUrl = 'https://github.com/SmartThingsOSS/springboot-dropwizard-metrics'
+		issueTrackerUrl = 'https://github.com/SmartThingsOSS/springboot-dropwizard-metrics'
+		vcsUrl = 'https://github.com/SmartThingsOSS/springboot-dropwizard-metrics.git'
 		version {
 			name = project.version
-			vcsTag = project.version
+			vcsTag = tag
 		}
 	}
 }

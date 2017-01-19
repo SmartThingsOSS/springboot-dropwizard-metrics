@@ -1,4 +1,4 @@
-package smartthings.metrics.autoconfiguration.datadog;
+package smartthings.springboot.metrics.autoconfiguration.datadog;
 
 import com.codahale.metrics.Metric;
 import com.codahale.metrics.MetricFilter;
@@ -28,8 +28,14 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+/**
+ * Automatically configures a {@link DatadogReporter} to a Datadog {@link MetricRegistry} when
+ * the config value 'metrics.datadog.enabled' is true.
+ */
 @Configuration
-@EnableConfigurationProperties(value = {DatadogReporterProperties.class, DatadogTransportProperties.class})
+@EnableConfigurationProperties(value = {
+		DatadogReporterProperties.class, DatadogTransportProperties.class
+})
 @Conditional(DatadogReporterAutoConfiguration.DatadogSetCondition.class)
 public class DatadogReporterAutoConfiguration {
 
@@ -54,9 +60,12 @@ public class DatadogReporterAutoConfiguration {
 				.withTags(new ArrayList<>(properties.getTags()))
 				.filter(getMetricFilter(properties.getIncludes(), properties.getExcludes()));
 
-		builder = (properties.isEc2Host()) ? builder.withEC2Host() : builder;
-		builder = (properties.getHost() != null) ? builder.withHost(properties.getHost()) : builder;
-		builder = (properties.getPrefix() != null) ? builder.withPrefix(properties.getPrefix()) : builder;
+		builder = (properties.isEc2Host()) ?
+				builder.withEC2Host() : builder;
+		builder = (properties.getHost() != null) ?
+				builder.withHost(properties.getHost()) : builder;
+		builder = (properties.getPrefix() != null) ?
+				builder.withPrefix(properties.getPrefix()) : builder;
 
 		DatadogReporter reporter = builder.build();
 
@@ -71,7 +80,8 @@ public class DatadogReporterAutoConfiguration {
 		Transport transport;
 		if ("http".equals(properties.getType())) {
 
-			Assert.hasLength(properties.getApiKey(), "Datadog API key is required for HTTP transport");
+			Assert.hasLength(properties.getApiKey(),
+					"Datadog API key is required for HTTP transport");
 
 			transport = new HttpTransport.Builder()
 					.withApiKey(properties.getApiKey())
@@ -79,15 +89,18 @@ public class DatadogReporterAutoConfiguration {
 					.withSocketTimeout(properties.getSocketTimeout())
 					.build();
 		} else {
-			Assert.isTrue(properties.getStatsdPort() > 0, "Datadog StatsD port is required for UDP transport");
-			Assert.hasLength(properties.getStatsdHost(), "Datadog StatsD host is required for UDP transport");
+			Assert.isTrue(properties.getStatsdPort() > 0,
+					"Datadog StatsD port is required for UDP transport");
+			Assert.hasLength(properties.getStatsdHost(),
+					"Datadog StatsD host is required for UDP transport");
 
 			UdpTransport.Builder builder = new UdpTransport.Builder()
 					.withPort(properties.getStatsdPort())
 					.withPrefix(properties.getPrefix())
 					.withStatsdHost(properties.getStatsdHost());
 
-			builder = (properties.getStatsdPrefix() != null) ? builder.withPrefix(properties.getStatsdPrefix()) : builder;
+			builder = (properties.getStatsdPrefix() != null) ?
+					builder.withPrefix(properties.getStatsdPrefix()) : builder;
 
 			transport = builder.build();
 		}
@@ -113,13 +126,17 @@ public class DatadogReporterAutoConfiguration {
 
 				if (includePatterns.size() > 0) {
 					for (Pattern pattern : includePatterns) {
-						if (pattern.matcher(name).matches()) return true;
+						if (pattern.matcher(name).matches()) {
+							return true;
+						}
 					}
 
 					return false;
 				} else {
 					for (Pattern pattern : excludePatterns) {
-						if (pattern.matcher(name).matches()) return false;
+						if (pattern.matcher(name).matches()) {
+							return false;
+						}
 					}
 
 					return true;
@@ -127,27 +144,29 @@ public class DatadogReporterAutoConfiguration {
 			}
 
 			@Override public String toString() {
-				return "[MetricFilter regexIncludes=" + StringUtils.collectionToDelimitedString(includes, "," +
-						" regexExcludes=" + StringUtils.collectionToDelimitedString(excludes, ","));
+				return "[MetricFilter regexIncludes=" +
+						StringUtils.collectionToDelimitedString(includes, "," +
+								" regexExcludes=" +
+								StringUtils.collectionToDelimitedString(excludes, ","));
 			}
 		};
 	}
 
-  static final class DatadogSetCondition extends SpringBootCondition {
+	static final class DatadogSetCondition extends SpringBootCondition {
 		private static final String ENABLED_PROPERTY = "metrics.datadog.enabled";
 
-    @Override public ConditionOutcome getMatchOutcome(ConditionContext context,
-        AnnotatedTypeMetadata a) {
+		@Override public ConditionOutcome getMatchOutcome(ConditionContext context,
+				AnnotatedTypeMetadata a) {
 
-      boolean enabled = isTrue(context.getEnvironment().getProperty(ENABLED_PROPERTY, Boolean.class));
+			boolean enabled = isTrue(context.getEnvironment().getProperty(ENABLED_PROPERTY, Boolean.class));
 
-      return enabled ?
-          ConditionOutcome.match() :
+			return enabled ?
+					ConditionOutcome.match() :
 					ConditionOutcome.noMatch(ENABLED_PROPERTY + " is false or not set");
-    }
-
-    private static boolean isTrue(Boolean b) {
-    	return b == null ? false : b;
 		}
-  }
+
+		private static boolean isTrue(Boolean b) {
+			return b != null && b;
+		}
+	}
 }

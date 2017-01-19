@@ -1,15 +1,24 @@
 apply plugin: 'findbugs'
+apply plugin: "pmd"
+apply plugin: "checkstyle"
 apply plugin: "jacoco"
-
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
 
 findbugs {
 	ignoreFailures = false
 	effort = "max"
 	reportLevel = "low"
-	excludeFilter = file("$rootProject.projectDir/gradle/findbugs/excludeFilter.xml")
 	sourceSets = [sourceSets.main]
+	reportsDir = file("$project.buildDir/coverage/findbugs")
+}
+
+checkstyle {
+	configFile = file("$rootProject.projectDir/gradle/checkstyle/checkstyle.xml")
+	reportsDir = file("$project.buildDir/coverage/checkstyle")
+}
+
+pmd {
+	ignoreFailures = false
+	reportsDir = file("$project.buildDir/coverage/pmd")
 }
 
 tasks.withType(FindBugs) {

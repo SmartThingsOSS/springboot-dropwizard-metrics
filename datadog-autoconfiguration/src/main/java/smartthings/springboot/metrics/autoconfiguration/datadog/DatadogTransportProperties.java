@@ -1,7 +1,11 @@
-package smartthings.metrics.autoconfiguration.datadog;
+package smartthings.springboot.metrics.autoconfiguration.datadog;
 
+import org.coursera.metrics.datadog.transport.Transport;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * Configuration properties for Datadog {@link Transport}.
+ */
 @ConfigurationProperties("metrics.datadog.transport")
 public class DatadogTransportProperties {
 

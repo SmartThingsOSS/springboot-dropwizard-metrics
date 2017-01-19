@@ -1,4 +1,4 @@
-package smartthings.metrics.autoconfiguration.datadog;
+package smartthings.springboot.metrics.autoconfiguration.datadog;
 
 import com.codahale.metrics.MetricRegistry;
 import com.google.common.collect.Sets;
@@ -32,7 +32,9 @@ import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-
+/**
+ * DatadogReporterIntegrationTest.
+ */
 @SpringBootTest(classes = TestServer.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
@@ -63,8 +65,10 @@ public class DatadogReporterIntegrationTest {
 
 		DatadogReporterProperties properties = context.getBean(DatadogReporterProperties.class);
 
-		assertThat(properties.getIncludes()).isEqualTo(Sets.newHashSet("counter.one", "counter.two", "counter.test"));
-		assertThat(properties.getExpansions()).isEqualTo(EnumSet.of(COUNT, MIN, MAX, MEDIAN));
+		assertThat(properties.getIncludes())
+				.isEqualTo(Sets.newHashSet("counter.one", "counter.two", "counter.test"));
+		assertThat(properties.getExpansions())
+				.isEqualTo(EnumSet.of(COUNT, MIN, MAX, MEDIAN));
 
 	}
 

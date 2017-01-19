@@ -1,8 +1,11 @@
-package smartthings.metrics.autoconfiguration.datadog;
+package smartthings.springboot.metrics.autoconfiguration.datadog;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
+/**
+ * SpringBootApplication used for integration tests.
+ */
 @SpringBootApplication
 public class TestServer {
 

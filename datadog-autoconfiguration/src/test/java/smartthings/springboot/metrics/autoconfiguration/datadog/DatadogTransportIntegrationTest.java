@@ -1,4 +1,4 @@
-package smartthings.metrics.autoconfiguration.datadog;
+package smartthings.springboot.metrics.autoconfiguration.datadog;
 
 import org.coursera.metrics.datadog.transport.HttpTransport;
 import org.coursera.metrics.datadog.transport.Transport;
@@ -13,6 +13,9 @@ import org.springframework.web.context.ConfigurableWebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * DatadogTransportIntegrationTest.
+ */
 @SpringBootTest(classes = TestServer.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration
