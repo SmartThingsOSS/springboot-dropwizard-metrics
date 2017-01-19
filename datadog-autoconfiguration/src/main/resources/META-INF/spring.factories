@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+smartthings.metrics.autoconfiguration.datadog.DatadogReporterAutoConfiguration,\
+smartthings.metrics.autoconfiguration.dropwizard.DropwizardJvmAutoConfiguration

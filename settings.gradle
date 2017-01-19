@@ -1,0 +1,1 @@
+include ":datadog-autoconfiguration", ":servlet-filter-autoconfiguration"

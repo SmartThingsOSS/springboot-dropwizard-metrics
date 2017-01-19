@@ -1,0 +1,11 @@
+metrics:
+  datadog:
+    enabled: true
+    expansion:
+      - COUNT
+      - MIN
+      - MAX
+      - MEDIAN
+    transport:
+      type: http
+      api-key: test
