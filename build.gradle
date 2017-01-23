@@ -31,9 +31,10 @@ ext {
 	shortMessage = grgit.head().shortMessage
 }
 
-group 'smartthings.springboot.metrics'
-
 allprojects {
+
+	group 'smartthings.springboot.metrics'
+
 	repositories {
 		mavenCentral()
 		jcenter()

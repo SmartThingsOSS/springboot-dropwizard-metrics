@@ -26,20 +26,22 @@ task printProperties {
 }
 
 if (isSnapshot) {
-	publishing {
-		publications {
-			main(MavenPublication) {
-				from components.java
-				artifact sourceJar
-			}
-		}
-		repositories {
-			maven {
-				credentials {
-					username smartThingsUserName
-					password smartThingsPassword
+	if (project.hasProperty('smartThingsUserName')) {
+		publishing {
+			publications {
+				main(MavenPublication) {
+					from components.java
+					artifact sourceJar
 				}
-				url "https://smartthings.artifactoryonline.com/smartthings/libs-snapshot-local"
+			}
+			repositories {
+				maven {
+					credentials {
+						username smartThingsUserName
+						password smartThingsPassword
+					}
+					url "https://smartthings.artifactoryonline.com/smartthings/libs-snapshot-local"
+				}
 			}
 		}
 	}

@@ -22,13 +22,14 @@ test:
 
 deployment:
   snapshot:
+    owner: SmartThingsOSS
     branch: master
     commands:
-      - ./gradlew publish -PsmartThingsArtifactoryUserName=$ARTIFACTORY_USERNAME -PsmartThingsArtifactoryPassword=$ARTIFACTORY_PASSWORD
+      - ./gradlew publish -PsmartThingsUserName=$ARTIFACTORY_USERNAME -PsmartThingsPassword=$ARTIFACTORY_PASSWORD
 
-# TODO use tag based release
-#  release:
-#    branch: release
-#    commands:
-#      - ./gradlew bintrayUpload
+  release:
+    owner: SmartThingsOSS
+    tag: /v\d+\.\d+\.\d+/
+    commands:
+      - ./gradlew bintray
 
