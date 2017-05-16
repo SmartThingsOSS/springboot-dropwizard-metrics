@@ -13,6 +13,7 @@ dependencies {
 	testCompile "org.mockito:mockito-core:1.10.19"
 	testCompile "org.hamcrest:hamcrest-core:1.3"
 	testCompile "org.assertj:assertj-core:3.6.1"
+	testCompile project(":datadog-autoconfiguration")
 	testRuntime 'ch.qos.logback:logback-classic:1.1.2'
 	testRuntime "org.slf4j:log4j-over-slf4j:${slf4jVersion}"
 	testRuntime "org.slf4j:jcl-over-slf4j:${slf4jVersion}"

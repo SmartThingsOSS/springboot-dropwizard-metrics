@@ -2,9 +2,9 @@
 dependencies {
 	compile "org.springframework.boot:spring-boot-autoconfigure:${springVersion}"
 	compile "org.projectlombok:lombok:1.16.10"
-	compile "org.coursera:dropwizard-metrics-datadog:1.1.6"
-	compileOnly "io.dropwizard.metrics:metrics-jvm:3.1.2"
-	compileOnly "io.dropwizard.metrics:metrics-logback:3.1.2"
+	compile "org.coursera:dropwizard-metrics-datadog:1.1.10"
+	compileOnly "io.dropwizard.metrics:metrics-jvm:${dropwizardVersion}"
+	compileOnly "io.dropwizard.metrics:metrics-logback:${dropwizardVersion}"
 
 	testCompile "org.springframework.boot:spring-boot-starter-test:${springVersion}"
 	testCompile "org.springframework.boot:spring-boot-starter-web:${springVersion}"
