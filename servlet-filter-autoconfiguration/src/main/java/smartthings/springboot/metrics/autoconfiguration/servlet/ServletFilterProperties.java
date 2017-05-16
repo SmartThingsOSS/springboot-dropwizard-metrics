@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "metrics.servlet")
 public class ServletFilterProperties {
 
-	private String namePrefix = "instrumented";
+	private String namePrefix = "servlet";
 
 	public String getNamePrefix() {
 		return this.namePrefix;
